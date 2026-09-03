@@ -73,3 +73,15 @@ glmnet = ["meson-python",
           "pybind11",
 	  "setuptools_scm",
 	  "ninja"]
+
+# Wheels for pinning this branch from another project (see
+# src/glmnetpp/README.vendored.md). Only 3.12 -- that is what the consuming
+# project uses -- and glibc only; the deployment target for macOS arm64 comes
+# from cibuildwheel's own default (11.0) rather than the building machine's
+# version. The test command is the point of the branch: it fails if the GIL
+# release did not survive the build.
+[tool.cibuildwheel]
+build = "cp312-*"
+skip = "*musllinux*"
+test-requires = "pytest"
+test-command = "pytest {project}/tests/test_gil.py"

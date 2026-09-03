@@ -11,28 +11,18 @@ jobs:
       fail-fast: false
       matrix:
         # Add windows-latest to the build matrix
-        os: [ubuntu-latest, macos-latest] # , windows-latest]
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest] # , windows-latest]
 
     steps:
 
-      - name: Check Secret Presence
-        run: |
-          if [ -z "${{ secrets.GLMNETPP_SUBMODULE_TOKEN }}" ]; then
-            echo "ERROR: The secret GLMNETPP_SUBMODULE_TOKEN is not visible to this runner."
-            exit 1
-          fi
-
-      - name: Checkout Parent Repo
+      # This branch vendors src/glmnetpp (see src/glmnetpp/README.vendored.md),
+      # so there is no private submodule and no GLMNETPP_SUBMODULE_TOKEN needed
+      # -- unlike main, this builds on a fork. eigen is public.
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GLMNETPP_SUBMODULE_TOKEN }}
-
-      - name: Configure Submodule Auth
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.GLMNETPP_SUBMODULE_TOKEN }}@github.com/intro-stat-learning/".insteadOf "git@github.com:intro-stat-learning/"
-
-      - name: Manual Submodule Update
-        run: git submodule update --init --recursive
+          submodules: true
+          fetch-depth: 0    # setuptools_scm needs history and tags
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.3.1 # Use the latest version
@@ -48,25 +38,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Check Secret Presence
-        run: |
-          if [ -z "${{ secrets.GLMNETPP_SUBMODULE_TOKEN }}" ]; then
-            echo "ERROR: The secret GLMNETPP_SUBMODULE_TOKEN is not visible to this runner."
-            exit 1
-          fi
-
-      - name: Configure Submodule Auth
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.GLMNETPP_SUBMODULE_TOKEN }}@github.com/intro-stat-learning/".insteadOf "git@github.com:intro-stat-learning/"
-
-      - name: Checkout Parent Repo
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GLMNETPP_SUBMODULE_TOKEN }}
-        submodules: true
-
-      - name: Manual Submodule Update
-        run: git submodule update --init --recursive
+          submodules: true
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
