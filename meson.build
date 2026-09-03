@@ -5,7 +5,7 @@ project('glmnet', 'cpp',
 py = import('python').find_installation(pure: false)
 
 # Eigen is vendored in src/eigen
-inc = include_directories('eigen', 'src/glmnetpp/include', 'src/glmnetpp/src', 'src/glmnetpp/test')
+inc = include_directories('eigen', 'src/glmnetpp/include')
 
 # Pybind11 dependency
 pybind11_dep = dependency('pybind11')
