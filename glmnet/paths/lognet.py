@@ -192,7 +192,7 @@ class LogNet(FastNetMixin):
         # fix intercept and coefs
 
         _args['a0'] = np.asfortranarray(np.zeros((nc, self.nlambda), float))
-        _args['ca'] = np.zeros((n_features*self.nlambda*nc, 1))
+        _args['ca'] = np.zeros(n_features*self.nlambda*nc) # 1-D: block of nx per lambda
 
         # reshape y
         if np.issubdtype(_args['y'].dtype, np.floating) or len(np.unique(_args['y'])) > 2:

@@ -57,6 +57,9 @@ def test_gil_released_during_solve():
     L = GaussNet(nlambda=200, lambda_min_ratio=1e-4)
     L.fit(D, resp)
     solve, args = L._dense, L._args
+    # fit() hands its `ca` output buffer over to coefs_ (the coefficient path
+    # is built in place there), so the re-entry needs a buffer of its own
+    args = {**args, 'ca': np.zeros((args['nx'], args['nlam']), order='F')}
 
     counter = 0
     stop = threading.Event()

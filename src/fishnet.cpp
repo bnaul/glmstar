@@ -89,7 +89,8 @@ py::dict fishnet_exp(
   result["a0"] = a0;
   result["nin"] = nin;
   result["alm"] = alm;
-  result["ca"] = ca;
+  // ca was filled in place; returning it here would make pybind11 copy the
+  // whole coefficient path (see FastNetMixin.fit)
   result["ia"] = ia;
   result["lmu"] = lmu;
   result["nulldev"] = nulldev;
@@ -199,7 +200,8 @@ py::dict spfishnet_exp(
   result["a0"] = a0;
   result["nin"] = nin;
   result["alm"] = alm;
-  result["ca"] = ca;
+  // ca was filled in place; returning it here would make pybind11 copy the
+  // whole coefficient path (see FastNetMixin.fit)
   result["ia"] = ia;
   result["lmu"] = lmu;
   result["nulldev"] = nulldev;

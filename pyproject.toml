@@ -84,4 +84,4 @@ glmnet = ["meson-python",
 build = "cp312-*"
 skip = "*musllinux*"
 test-requires = "pytest"
-test-command = "pytest {project}/tests/test_gil.py"
+test-command = "pytest {project}/tests/test_gil.py {project}/tests/paths/test_extract_fits.py"
