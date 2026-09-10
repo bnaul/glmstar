@@ -298,8 +298,9 @@ class FastNetMixin(GLMNet): # base class for C++ path methods
         lambda_values = _fit['alm'][:nfits]
 
         if ninmax > 0:
-            if _fit['ca'].ndim == 1: # logistic is like this
-                unsort_coefs = _fit['ca'][:(n_features*nfits)].reshape(nfits, n_features)
+            if _fit['ca'].ndim == 1: # logistic is like this: one block of nx per lambda
+                nx = _args['nx']
+                unsort_coefs = _fit['ca'][:(nx*nfits)].reshape(nfits, nx)
             else:
                 unsort_coefs = _fit['ca'][:,:nfits].T
             df = (np.fabs(unsort_coefs) > 0).sum(1)
